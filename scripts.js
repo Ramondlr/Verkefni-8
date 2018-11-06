@@ -10,20 +10,21 @@ document.addEventListener('DOMContentLoaded', () => {
 const text = (() => {
   let items;
 
+  // TODO láta hluti í _items virka
+
   function init(_form, _items) {
     items = _items;
     _form.addEventListener('submit', formHandler);
-    
-    //Finnur það sem ýtt var á og sendum í rétt fall
+
     for(let item of items.querySelectorAll('.item')){
-      const checkbox = item.querySelector('.item__checkbox')
-      checkbox.addEventListener('click', finish)
+      const checkbox = item.querySelector('.item__checkbox');
+      checkbox.addEventListener('click', finish);
 
-      const text = item.querySelector('.item__text')
-      text.addEventListener('click', edit)
+      const text = item.querySelector('.item__text');
+      text.addEventListener('click', edit);
 
-      const button = item.querySelector('.item__button')
-      button.addEventListener('click', deleteItem)
+      const button = item.querySelector('.item__button');
+      button.addEventListener('click', deleteItem);
     }
     console.log(_items)
   }
@@ -31,19 +32,17 @@ const text = (() => {
   function formHandler(e) {
     e.preventDefault();
 
-    //Hér er event form, finnur form__input
-    const input = e.target.querySelector('.form__input')
+    const input = e.target.querySelector('.form__input');
 
-    if(input.value.trim().length > 0){
-      add(input.value) //Sendir í add fallið
-      //hreynsir það sem stendur í rammanaum
-      input.value = ''
+    if (input.value.trim().length > 0) {
+      add(input.value);
+      input.value = "";
     }
   }
 
   // event handler fyrir það að klára færslu
   function finish(e) {
-    e.target.parentNode.classList.toggle('item--done')
+    e.target.parentNode.classList.toggle('item--done');
   }
 
   // event handler fyrir það að breyta færslu
@@ -53,11 +52,10 @@ const text = (() => {
 
     parentNode.removeChild(target);
 
-    const input = el('input', 'item__edit') 
+    const input = el('input', 'item__edit'); 
     input.setAttribute('type', 'text'); 
-
-    input.value = textContent; //Sækir gamla textann
-    console.log(input.value)
+    input.value = textContent;
+    console.log(input.value);
     input.addEventListener('keyup',commit); 
 
     const button = parentNode.querySelector('.item__button');
@@ -68,47 +66,37 @@ const text = (() => {
 
   // event handler fyrir það að klára að breyta færslu
   function commit(e) {
-
-    //ýtt er á enter
     if(event.keyCode === 13){
       console.log(e.target)
-      
-      //Geymir textann
+
       const newText = e.target.value 
-      //Geymir foreldrið
       const parentNode = e.target.parentNode
       parentNode.removeChild(e.target)
-
-      //nýtt element með réttum texta
+      
       newTextEl = el('span', 'item__text', edit)
       newTextEl.appendChild(document.createTextNode(newText))
-
+      
       const button = parentNode.querySelector('.item__button');
-      //nýtt element á foreldi á réttum stað
-      parentNode.insertBefore(newTextEl, button)
-    } 
+
+      parentNode.insertBefore(newTextEl, button) 
+      
+    }
   }
 
-  // fall sér um að bæta við nýju item
+  // fall sem sér um að bæta við nýju item
   function add(value) {
 
-    //nýtt item
     const newItem = el('li', 'item')
 
-    //nýtt checkbox
     const newCheckbox = el('input', 'item__checkbox', finish)
     newCheckbox.setAttribute('type', 'checkbox'); 
 
-
-    //nýr texti
     const newText = el('span', 'item__text', edit)
     newText.appendChild(document.createTextNode(value))
 
-    //nýr takki
     const newButton = el('button', 'item__button', deleteItem)
     newButton.appendChild(document.createTextNode('Eyða'))
 
-    //hlutir tengdir rétt saman
     items.appendChild(newItem)
     newItem.appendChild(newCheckbox)
     newItem.appendChild(newText)
@@ -125,14 +113,14 @@ const text = (() => {
 
   // hjálparfall til að útbúa element
   function el(type, className, clickHandler) {
-    var newElement = document.createElement(type);
+    var newElement = document.createElement(type); 
     if(className) {
-      newElement.classList.add(className);
+      newElement.classList.add(className); 
     }
-    if(clickHandler){
+    if(clickHandler){  
       newElement.addEventListener('click', clickHandler);
     }
-    return newElement;
+    return newElement;  
   }
 
   return {
